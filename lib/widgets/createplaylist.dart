@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
 
@@ -7,7 +8,6 @@ createplaylist(String name) async {
   List<Songs> songsplaylist = [];
 
   box1.add(PlaylistSongs(playlistname: name, playlistssongs: songsplaylist));
-  // print(name);
 }
 
 editPlaylist(String name, index) async {
@@ -55,4 +55,12 @@ deletePlaylist(int index) {
   final box1 = PlaylistSongsbox.getInstance();
 
   box1.deleteAt(index);
+}
+
+bool checkIfAlreadyExists(String value) {
+  final playlistbox = PlaylistSongsbox.getInstance();
+  List<PlaylistSongs> list = playlistbox.values.toList();
+  bool isAlreadyAdded =
+      list.where((element) => element.playlistname == value.trim()).isNotEmpty;
+  return isAlreadyAdded;
 }

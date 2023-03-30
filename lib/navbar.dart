@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resfy_music/db/functions/colors.dart';
+import 'package:resfy_music/widgets/popup.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -13,7 +15,7 @@ class NavBar extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              'assets/images/logo.png',
+              'assets/logo.png',
               height: 250,
             ),
             ListTile(
@@ -26,11 +28,29 @@ class NavBar extends StatelessWidget {
                 'About',
                 style: TextStyle(color: fontcolor, fontSize: 20),
               ),
-              onTap: () {},
+              onTap: () {
+                showAboutDialog(
+                    context: context,
+                    applicationName: "Resfy Player.",
+                    applicationIcon: Image.asset(
+                      "assets/logo.png",
+                      height: 32,
+                      width: 32,
+                    ),
+                    applicationVersion: "1.0.0",
+                    children: [
+                      const Text(
+                          "Resfy is an offline music player app which allows use to hear music from their local storage and also do functions like add to favorites , create playlists , recently played , mostly played etc."),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("App developed by Sandra Ashok.")
+                    ]);
+              },
             ),
             ListTile(
               leading: const Icon(
-                Icons.privacy_tip_outlined,
+                Icons.shield,
                 color: iconcolor,
                 size: 25,
               ),
@@ -38,7 +58,13 @@ class NavBar extends StatelessWidget {
                 'Privacy Policy',
                 style: TextStyle(color: fontcolor, fontSize: 20),
               ),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (builder) {
+                      return settingmenupopup(mdFilename: 'privacypolicy.md');
+                    });
+              },
             ),
             ListTile(
               leading: const Icon(
@@ -50,7 +76,14 @@ class NavBar extends StatelessWidget {
                 'Terms and Conditions',
                 style: TextStyle(color: fontcolor, fontSize: 20),
               ),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (builder) {
+                      return settingmenupopup(
+                          mdFilename: 'termsandconditions.md');
+                    });
+              },
             ),
             ListTile(
               leading: const Icon(
@@ -62,7 +95,10 @@ class NavBar extends StatelessWidget {
                 'Share',
                 style: TextStyle(color: fontcolor, fontSize: 20),
               ),
-              onTap: () {},
+              onTap: () {
+                Share.share("https://github.com/SandraAsok/resfy_music",
+                    subject: "GitHub Repository of this App");
+              },
             ),
           ],
         ),

@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: appbarcolor,
           bottom: const TabBar(tabs: [
             Tab(icon: Icon(Icons.music_note_outlined), text: 'All Songs'),
-            Tab(icon: Icon(Icons.playlist_play), text: 'Playlist'),
+            Tab(icon: Icon(Icons.playlist_play), text: 'Library'),
           ]),
           title: const Text(
             'Resfy Music',

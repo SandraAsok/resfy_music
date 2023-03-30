@@ -157,13 +157,14 @@ class _PlayListScreenState extends State<PlayListScreen> {
 showplaylistaddoptions(BuildContext context) {
   final myController = TextEditingController();
   double vwidth = MediaQuery.of(context).size.width;
+
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      insetPadding: EdgeInsets.zero,
+      insetPadding: const EdgeInsets.only(bottom: 100.0),
       contentPadding: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       backgroundColor: tilecolor,
@@ -213,58 +214,58 @@ showplaylistaddoptions(BuildContext context) {
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      width: vwidth * 0.43,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: bgcolor,
-                      ),
-                      child: TextButton.icon(
-                        icon: const Icon(
-                          Icons.close,
-                          color: iconcolor,
-                        ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          myController.clear();
                         },
-                        label: const Text(
-                          'Cancel',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: fontcolor,
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 100.0),
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: fontcolor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      width: vwidth * 0.43,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: bgcolor,
-                      ),
-                      child: TextButton.icon(
-                        icon: const Icon(
-                          Icons.done,
-                          color: iconcolor,
-                        ),
-                        onPressed: () {
-                          createplaylist(myController.text);
-                          Navigator.pop(context);
-                        },
-                        label: const Text(
-                          'Done',
-                          style: TextStyle(fontSize: 20, color: fontcolor),
-                        ),
-                      ),
-                    ),
-                  ),
+                      ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: myController,
+                          builder: ((context, controller, child) {
+                            return TextButton(
+                              onPressed: myController.text.isEmpty
+                                  ? null
+                                  : !checkIfAlreadyExists(myController.text)
+                                      ? () async {
+                                          createplaylist(myController.text);
+                                          Navigator.pop(context);
+                                          myController.clear();
+                                        }
+                                      : () async {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  backgroundColor: tilecolor,
+                                                  content: Text(
+                                                    "Playlist Already exists !!!",
+                                                    style: TextStyle(
+                                                        color: fontcolor),
+                                                  )));
+                                        },
+                              child: const Text(
+                                'Done',
+                                style:
+                                    TextStyle(fontSize: 20, color: fontcolor),
+                              ),
+                            );
+                          }))
+                    ],
+                  )
                 ],
               )
             ],
