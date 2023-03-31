@@ -4,6 +4,7 @@ import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/mostplayed.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 class MostPlayedScreen extends StatefulWidget {
   const MostPlayedScreen({super.key});
@@ -175,6 +176,7 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
               ],
             ),
           ),
+          bottomSheet: const NowPlayingSlider(),
         ),
       ),
     );
