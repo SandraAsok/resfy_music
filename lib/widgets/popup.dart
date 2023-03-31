@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:resfy_music/db/functions/colors.dart';
 
 class settingmenupopup extends StatelessWidget {
   settingmenupopup({Key? key, this.radius = 8, required this.mdFilename})
@@ -12,7 +13,7 @@ class settingmenupopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Color.fromARGB(255, 35, 35, 35),
+      backgroundColor: bgcolor,
       shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       child: Column(
@@ -26,11 +27,11 @@ class settingmenupopup extends StatelessWidget {
                     if (snapshot.hasData) {
                       return Markdown(
                           styleSheet: MarkdownStyleSheet.fromTheme(ThemeData(
-                              textTheme: TextTheme(
+                              textTheme: const TextTheme(
                                   bodyText2: TextStyle(
                                       fontFamily: "Inter",
                                       fontSize: 15.0,
-                                      color: Colors.white)))),
+                                      color: fontcolor)))),
                           data: snapshot.data.toString());
                     }
                     return const Center(
@@ -50,7 +51,7 @@ class settingmenupopup extends StatelessWidget {
               width: double.infinity,
               child: const Text(
                 'OK',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: fontcolor),
               ),
             ),
           )
