@@ -5,6 +5,7 @@ import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/functions/dbfunctions.dart';
 import 'package:resfy_music/db/models/recentlyplayed.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:resfy_music/screens/likedscreen.dart';
 
 class Recent extends StatefulWidget {
   const Recent({super.key});
@@ -78,32 +79,52 @@ class _RecentState extends State<Recent> {
                   height: 20,
                 ),
                 ListTile(
-                  title: const Text(
-                    'Recently Played',
-                    style: TextStyle(fontSize: 20, color: fontcolor),
-                  ),
-                  trailing: Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: tilecolor),
-                    child: IconButton(
-                      onPressed: () {
-                        _audioPlayer.open(
-                            Playlist(audios: rcentplay, startIndex: 0),
-                            showNotification: true,
-                            headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
-                            loopMode: LoopMode.playlist);
-                      },
-                      icon: const Icon(
-                        Icons.play_arrow,
-                        color: iconcolor,
-                        size: 30,
-                      ),
+                    title: const Text(
+                      'Recently Played',
+                      style: TextStyle(fontSize: 20, color: fontcolor),
                     ),
-                  ),
-                ),
+                    trailing: PlayerBuilder.isPlaying(
+                        player: player,
+                        builder: ((context, isPlaying) {
+                          return Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: tilecolor),
+                            child: IconButton(
+                              onPressed: () {
+                                if (isPlaying) {
+                                  player.stop();
+                                } else {
+                                  _audioPlayer.open(
+                                      Playlist(
+                                          audios: rcentplay, startIndex: 0),
+                                      showNotification: true,
+                                      headPhoneStrategy:
+                                          HeadPhoneStrategy.pauseOnUnplug,
+                                      loopMode: LoopMode.playlist);
+                                }
+                              },
+                              icon: AnimatedCrossFade(
+                                duration: const Duration(milliseconds: 300),
+                                firstChild: const Icon(
+                                  Icons.play_arrow,
+                                  color: iconcolor,
+                                  size: 25,
+                                ),
+                                secondChild: const Icon(
+                                  Icons.pause,
+                                  color: iconcolor,
+                                  size: 25,
+                                ),
+                                crossFadeState: isPlaying
+                                    ? CrossFadeState.showSecond
+                                    : CrossFadeState.showFirst,
+                              ),
+                            ),
+                          );
+                        }))),
                 ValueListenableBuilder<Box<RecentlyPlayed>>(
                   valueListenable: recentlyPlayedBox.listenable(),
                   builder: ((context, RecentDB, child) {
