@@ -1,4 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
 

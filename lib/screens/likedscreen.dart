@@ -4,7 +4,6 @@ import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/favourites.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:resfy_music/widgets/addToFavourites.dart';
-import 'package:resfy_music/widgets/nowplayingslider.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Liked extends StatefulWidget {
@@ -26,7 +25,6 @@ class _LikedState extends State<Liked> {
 
   @override
   void initState() {
-    // TODO: implement initState
     final List<Favourites> favouritesongs =
         box.values.toList().reversed.toList();
     for (var item in favouritesongs) {
@@ -288,7 +286,7 @@ showfavoriteremove(BuildContext context, int index) {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             backgroundColor: bgcolor,
             alignment: Alignment.bottomCenter,
-            content: Container(
+            content: SizedBox(
               height: 150,
               width: vwidth,
               child: Padding(
@@ -297,8 +295,8 @@ showfavoriteremove(BuildContext context, int index) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
                         child: Center(
                           child: Text(
                             'Are you sure?',
@@ -319,7 +317,7 @@ showfavoriteremove(BuildContext context, int index) {
                                 Icons.close,
                                 color: iconcolor,
                               ),
-                              label: Text(
+                              label: const Text(
                                 'cancel',
                                 style:
                                     TextStyle(color: fontcolor, fontSize: 20),
@@ -343,7 +341,7 @@ showfavoriteremove(BuildContext context, int index) {
                                   Icons.done,
                                   color: iconcolor,
                                 ),
-                                label: Text(
+                                label: const Text(
                                   'Yes',
                                   style:
                                       TextStyle(color: fontcolor, fontSize: 20),

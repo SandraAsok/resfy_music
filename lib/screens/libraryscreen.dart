@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:resfy_music/db/functions/colors.dart';
-import 'package:resfy_music/db/models/playlistmodel.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
 import 'package:resfy_music/screens/likedscreen.dart';
 import 'package:resfy_music/screens/mostplayedscreen.dart';
@@ -21,9 +20,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     //final playlistbox = PlaylistSongsbox.getInstance();
     //late List<Playlistsongs> playlistsong = playlistbox.values.toList();
-    bool isVisible = true;
-    List<Songs> dbsongs = box.values.toList();
-    double vwidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: bgcolor,
       body: Column(
@@ -32,8 +28,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ListTile(
             tileColor: tilecolor,
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: ((context) => Liked())));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const Liked())));
             },
             leading: const Icon(Icons.favorite, color: iconcolor, size: 25),
             title:
@@ -43,8 +39,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ListTile(
             tileColor: tilecolor,
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: ((context) => Recent())));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const Recent())));
             },
             leading: const Icon(Icons.queue_music, color: iconcolor, size: 25),
             title: const Text('Recently Played',

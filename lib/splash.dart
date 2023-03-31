@@ -7,8 +7,6 @@ import 'package:resfy_music/db/models/mostplayed.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
 import 'package:resfy_music/screens/homescreen.dart';
 
-import 'db/functions/dbfunctions.dart';
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

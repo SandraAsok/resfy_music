@@ -199,7 +199,6 @@ showOptions(BuildContext context, int index) {
 
 showplaylistoptions(BuildContext context, int index) {
   final box = PlaylistSongsbox.getInstance();
-  double vertwidth = MediaQuery.of(context).size.width;
   showDialog(
       context: context,
       builder: ((context) => StatefulBuilder(builder: ((context, setState) {

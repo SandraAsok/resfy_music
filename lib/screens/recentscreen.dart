@@ -127,7 +127,9 @@ class _RecentState extends State<Recent> {
                         }))),
                 ValueListenableBuilder<Box<RecentlyPlayed>>(
                   valueListenable: recentlyPlayedBox.listenable(),
+                  // ignore: non_constant_identifier_names
                   builder: ((context, RecentDB, child) {
+                    // ignore: non_constant_identifier_names
                     List<RecentlyPlayed> Recentplayed =
                         RecentDB.values.toList().reversed.toList();
                     return Recentplayed.isNotEmpty
