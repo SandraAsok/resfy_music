@@ -65,6 +65,7 @@ class _RecentState extends State<Recent> {
                               padding: EdgeInsets.only(left: 5.0),
                               child: Icon(
                                 Icons.arrow_back_ios,
+                                color: iconcolor,
                               ),
                             ),
                             color: tilecolor,
@@ -131,7 +132,7 @@ class _RecentState extends State<Recent> {
                   builder: ((context, RecentDB, child) {
                     // ignore: non_constant_identifier_names
                     List<RecentlyPlayed> Recentplayed =
-                        RecentDB.values.toList().reversed.toList();
+                        RecentDB.values.toList();
                     return Recentplayed.isNotEmpty
                         ? (ListView.builder(
                             reverse: true,

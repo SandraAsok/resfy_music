@@ -127,13 +127,23 @@ class _PlayListScreenState extends State<PlayListScreen> {
                                 playlistsong[index].playlistname!,
                                 style: const TextStyle(color: fontcolor),
                               ),
-                              trailing: IconButton(
-                                onPressed: () {
-                                  // deletePlaylist(index);
-                                  showplaylistdeleteoptions(context, index);
-                                },
-                                icon: const Icon(Icons.delete),
-                                color: iconcolor,
+                              trailing: Wrap(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      showPlaylistEditOption(context, index);
+                                    },
+                                    icon: const Icon(Icons.edit),
+                                    color: iconcolor,
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      showplaylistdeleteoptions(context, index);
+                                    },
+                                    icon: const Icon(Icons.delete),
+                                    color: iconcolor,
+                                  ),
+                                ],
                               ),
                             );
                           }),
@@ -360,4 +370,125 @@ showplaylistdeleteoptions(BuildContext context, int index) {
               ),
             ),
           )));
+}
+
+showPlaylistEditOption(BuildContext context, int index) {
+  final playlistbox = PlaylistSongsbox.getInstance();
+  List<PlaylistSongs> playlistsong = playlistbox.values.toList();
+  final textEditmyController =
+      TextEditingController(text: playlistsong[index].playlistname);
+  double vwidth = MediaQuery.of(context).size.width;
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      insetPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: bgcolor,
+      alignment: Alignment.bottomCenter,
+      content: SizedBox(
+        height: 250,
+        width: vwidth,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    'Edit Playlist',
+                    style: TextStyle(fontSize: 25, color: fontcolor),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: vwidth * 0.90,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: tilecolor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, top: 5, bottom: 5),
+                        child: TextFormField(
+                          style: const TextStyle(color: fontcolor),
+                          controller: textEditmyController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            fillColor: tilecolor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: vwidth * 0.43,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: tilecolor,
+                      ),
+                      child: TextButton.icon(
+                        icon: const Icon(
+                          Icons.close,
+                          color: iconcolor,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        label: const Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 20, color: fontcolor),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: vwidth * 0.40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: tilecolor,
+                      ),
+                      child: TextButton.icon(
+                        icon: const Icon(
+                          Icons.done,
+                          color: iconcolor,
+                        ),
+                        onPressed: () {
+                          editPlaylist(textEditmyController.text, index);
+                          Navigator.pop(context);
+                        },
+                        label: const Text(
+                          'Done',
+                          style: TextStyle(fontSize: 20, color: fontcolor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

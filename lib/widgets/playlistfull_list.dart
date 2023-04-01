@@ -168,10 +168,13 @@ class _PlaylistFullListState extends State<PlaylistFullList> {
                                   },
                                 )),
                           ))
-                        : const Center(
-                            child: Text(
-                              'Please add a song!',
-                              style: TextStyle(color: fontcolor),
+                        : const Padding(
+                            padding: EdgeInsets.only(top: 100),
+                            child: Center(
+                              child: Text(
+                                'Please add a song!',
+                                style: TextStyle(color: fontcolor),
+                              ),
                             ),
                           );
                   }))

@@ -46,6 +46,5 @@ updaterecentlyplayed(RecentlyPlayed value) {
         list.indexWhere((element) => element.songname == value.songname);
     recentlyPlayedBox.deleteAt(index);
     recentlyPlayedBox.add(value);
-    list.reversed;
   }
 }
