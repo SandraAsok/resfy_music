@@ -23,7 +23,7 @@ addToFavourites(int index) async {
     int currentindex = favouritessongs
         .indexWhere((element) => element.id == dbsongs[index].id);
     await favouritesdb.deleteAt(currentindex);
-    await favouritesdb.deleteAt(index);
+    // await favouritesdb.deleteAt(index);
   }
 }
 

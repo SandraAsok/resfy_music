@@ -32,6 +32,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
   late AnimationController iconcontroller;
   bool isAnimated = false;
   bool isRepeatOn = false;
+  bool isShuffleOn = false;
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                 )
               ],
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             ValueListenableBuilder(
                 valueListenable: NowPlayingScreen.nowplayingindex,
                 builder: (BuildContext context, int value1, child) {
@@ -108,14 +109,22 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             children: [
                               QueryArtworkWidget(
                                 artworkQuality: FilterQuality.high,
-                                artworkHeight: height * 0.34,
-                                artworkWidth: height * 0.34,
+                                artworkHeight: height * 0.40,
+                                artworkWidth: height * 0.40,
                                 artworkBorder: BorderRadius.circular(10),
                                 artworkFit: BoxFit.cover,
                                 id: allDbdongs[value1].id!,
                                 type: ArtworkType.AUDIO,
+                                nullArtworkWidget: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    "assets/logo.png",
+                                    height: height * 0.40,
+                                    width: width * 0.40,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 60),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -135,7 +144,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                             allDbdongs[value1].songname!,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
-                                                fontSize: 18, color: fontcolor),
+                                                fontSize: 20, color: fontcolor),
                                           ),
                                         ),
                                       )
@@ -143,7 +152,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 30),
                               Column(
                                 children: [
                                   PlayerBuilder.realtimePlayingInfos(
@@ -157,7 +166,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
 
                                       return Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
+                                            left: 20, right: 20),
                                         child: ProgressBar(
                                           baseBarColor:
                                               Colors.white.withOpacity(0.5),
@@ -193,6 +202,29 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                               width: 50,
                                               height: 50,
                                               child: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isShuffleOn =
+                                                          !isShuffleOn;
+                                                    });
+                                                    player.toggleShuffle();
+                                                  },
+                                                  icon: (isShuffleOn)
+                                                      ? const Icon(
+                                                          Icons.shuffle,
+                                                          color: iconcolor,
+                                                          size: 25,
+                                                        )
+                                                      : const Icon(
+                                                          Icons.shuffle_on,
+                                                          color: iconcolor,
+                                                          size: 25,
+                                                        )),
+                                            ),
+                                            SizedBox(
+                                              width: 50,
+                                              height: 50,
+                                              child: IconButton(
                                                 onPressed: () {
                                                   previousMusic(player, value1,
                                                       allDbdongs);
@@ -200,7 +232,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                                 icon: const Icon(
                                                   Icons.skip_previous,
                                                   color: iconcolor,
-                                                  size: 35,
+                                                  size: 30,
                                                 ),
                                               ),
                                             ),
@@ -233,7 +265,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                                     : const Icon(
                                                         Icons.play_arrow,
                                                         color: iconcolor,
-                                                        size: 35,
+                                                        size: 30,
                                                       ),
                                               ),
                                             ),
@@ -249,7 +281,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                                 icon: const Icon(
                                                   Icons.skip_next,
                                                   color: iconcolor,
-                                                  size: 35,
+                                                  size: 30,
                                                 ),
                                               ),
                                             ),
@@ -275,6 +307,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                                     : const Icon(
                                                         Icons.repeat_one,
                                                         color: iconcolor,
+                                                        size: 25,
                                                       )),
                                           ],
                                         ),

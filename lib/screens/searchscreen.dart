@@ -108,6 +108,19 @@ class _SearchScreenState extends State<SearchScreen> {
           .toList();
 
       allsongs.clear();
+      if (searchlist.isEmpty) {
+        showDialog(
+            context: context,
+            builder: ((context) {
+              return const AlertDialog(
+                backgroundColor: tilecolor,
+                content: Text(
+                  "Oopss!!! Song Not Found",
+                  style: TextStyle(color: fontcolor),
+                ),
+              );
+            }));
+      }
       for (var item in searchlist) {
         allsongs.add(Audio.file(item.songurl.toString(),
             metas: Metas(title: item.songname, id: item.id.toString())));
