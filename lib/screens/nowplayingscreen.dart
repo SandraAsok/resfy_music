@@ -113,7 +113,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                 artworkWidth: height * 0.40,
                                 artworkBorder: BorderRadius.circular(10),
                                 artworkFit: BoxFit.cover,
-                                id: allDbdongs[value1].id!,
+                                //id: allDbdongs[value1].id!,
+                                id: int.parse(playing.audio.audio.metas.id!),
                                 type: ArtworkType.AUDIO,
                                 nullArtworkWidget: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -141,7 +142,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                         child: Container(
                                           width: 300,
                                           child: Text(
-                                            allDbdongs[value1].songname!,
+                                            //  allDbdongs[value1].songname!,
+                                            player.getCurrentAudioTitle,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                                 fontSize: 20, color: fontcolor),
@@ -225,9 +227,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                               width: 50,
                                               height: 50,
                                               child: IconButton(
-                                                onPressed: () {
-                                                  previousMusic(player, value1,
-                                                      allDbdongs);
+                                                onPressed: () async {
+                                                  // previousMusic(player, value1,
+                                                  //     allDbdongs);
+                                                  await player.previous();
                                                 },
                                                 icon: const Icon(
                                                   Icons.skip_previous,
@@ -245,11 +248,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                                     BorderRadius.circular(35),
                                               ),
                                               child: IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   if (isPlaying) {
-                                                    player.pause();
+                                                    await player.pause();
                                                   } else {
-                                                    player.play();
+                                                    await player.play();
                                                   }
                                                   setState(
                                                     () {
@@ -273,9 +276,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                               width: 50,
                                               height: 50,
                                               child: IconButton(
-                                                onPressed: () {
-                                                  skipMusic(player, value1,
-                                                      allDbdongs);
+                                                onPressed: () async {
+                                                  // skipMusic(player, value1,
+                                                  //     allDbdongs);
+                                                  await player.next();
                                                   setState(() {});
                                                 },
                                                 icon: const Icon(

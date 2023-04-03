@@ -9,19 +9,20 @@ import 'package:resfy_music/db/models/mostplayed.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
 import 'package:resfy_music/db/models/recentlyplayed.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
+import 'package:resfy_music/screens/nowplayingscreen.dart';
 import 'package:resfy_music/widgets/addtofavourites.dart';
 import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 class AllSongsWidget extends StatefulWidget {
-  const AllSongsWidget({super.key});
+  AllSongsWidget({super.key});
 
   @override
   State<AllSongsWidget> createState() => _AllSongsWidgetState();
 }
 
-final OnAudioQuery audioQuery = OnAudioQuery();
+//final OnAudioQuery audioQuery = OnAudioQuery();
 
-final AssetsAudioPlayer player = AssetsAudioPlayer();
+final AssetsAudioPlayer player = AssetsAudioPlayer.withId('0');
 final mostbox = MostplayedBox.getInstance();
 
 class _AllSongsWidgetState extends State<AllSongsWidget> {
@@ -32,6 +33,7 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
 
   List<Audio> convertaudio = [];
   List<MostPlayed> mostplayed = mostbox.values.toList();
+  // List<Audio> convertAudios = [];
 
   @override
   void initState() {
@@ -52,73 +54,93 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
+    return Scaffold(
+      backgroundColor: bgcolor,
+      body: Column(
         children: [
-          ValueListenableBuilder(
-            valueListenable: box.listenable(),
-            builder: ((context, Box<Songs> allsongbox, child) {
-              List<Songs> alldbsongs = allsongbox.values.toList();
-              if (alldbsongs.isEmpty) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+          Container(
+            height: 550,
+            color: bgcolor,
+            child: ValueListenableBuilder<Box<Songs>>(
+              valueListenable: box.listenable(),
+              builder: ((context, Box<Songs> allsongbox, child) {
+                List<Songs> alldbsongs = allsongbox.values.toList();
+                return Expanded(
+                  child: ListView.builder(
+                      // physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: alldbsongs.length,
+                      itemBuilder: ((context, index) {
+                        RecentlyPlayed rsongs;
+                        Songs songs = alldbsongs[index];
+                        MostPlayed mostsong = mostplayed[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              top: 15, left: 5, bottom: 10.0),
+                          child: ListTile(
+                            onTap: () {
+                              player.open(
+                                Playlist(
+                                    audios: convertaudio, startIndex: index),
+                                headPhoneStrategy:
+                                    HeadPhoneStrategy.pauseOnUnplugPlayOnPlug,
+                                showNotification: true,
+                                autoStart: true,
+                              );
+                              NowPlayingScreen.nowplayingindex.value = index;
+                              NowPlayingSlider.enteredvalue.value = index;
+
+                              //setState(() {});
+                              rsongs = RecentlyPlayed(
+                                  id: songs.id,
+                                  duration: songs.duration,
+                                  songname: songs.songname,
+                                  songurl: songs.songurl,
+                                  index: index);
+
+                              updaterecentlyplayed(rsongs);
+                              // updatePlayedSongsCount(mostsong, index);
+                              // Navigator.of(context).push(MaterialPageRoute(
+                              //     builder: ((context) => NowPlayingScreen())));
+                            },
+                            leading: QueryArtworkWidget(
+                              id: alldbsongs[index].id!,
+                              type: ArtworkType.AUDIO,
+                              keepOldArtwork: true,
+                              artworkBorder: BorderRadius.circular(10),
+                              nullArtworkWidget: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset("assets/logo.png"),
+                              ),
+                            ),
+                            title: Text(
+                              alldbsongs[index].songname!,
+                              style: const TextStyle(color: fontcolor),
+                            ),
+                            trailing: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      showOptions(context, index);
+                                    },
+                                    icon: const Icon(
+                                      Icons.more_vert,
+                                      color: iconcolor,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        );
+                      })),
                 );
-              }
-              return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: alldbsongs.length,
-                  itemBuilder: ((context, index) {
-                    RecentlyPlayed rsongs;
-                    Songs songs = alldbsongs[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 15, left: 5),
-                      child: ListTile(
-                        onTap: () {
-                          NowPlayingSlider.enteredvalue.value = index;
-                          MostPlayed mostsong = mostplayed[index];
-                          updatePlayedSongsCount(mostsong, index);
-                          rsongs = RecentlyPlayed(
-                            id: songs.id,
-                            songname: songs.songname,
-                            duration: songs.duration,
-                            songurl: songs.songurl,
-                            index: index,
-                          );
-                          NowPlayingSlider.enteredvalue.value = index;
-                          updaterecentlyplayed(rsongs);
-                          updatePlayedSongsCount(mostsong, index);
-                        },
-                        leading: QueryArtworkWidget(
-                          id: alldbsongs[index].id!,
-                          type: ArtworkType.AUDIO,
-                          keepOldArtwork: true,
-                          artworkBorder: BorderRadius.circular(10),
-                        ),
-                        title: Text(
-                          alldbsongs[index].songname!,
-                          style: const TextStyle(color: fontcolor),
-                        ),
-                        trailing: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  showOptions(context, index);
-                                },
-                                icon: const Icon(
-                                  Icons.more_vert,
-                                  color: iconcolor,
-                                ))
-                          ],
-                        ),
-                      ),
-                    );
-                  }));
-            }),
-          )
+              }),
+            ),
+          ),
+          NowPlayingSlider(),
         ],
       ),
+      // bottomSheet: const NowPlayingSlider(),
     );
   }
 }

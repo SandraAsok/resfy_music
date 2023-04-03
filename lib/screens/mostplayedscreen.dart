@@ -152,7 +152,7 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
                                       nullArtworkWidget: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.asset(
-                                          'assets/images/music.jpeg',
+                                          'assets/images/logo.png',
                                           height: vertheight * 0.06,
                                           width: vertheight * 0.06,
                                         ),
@@ -176,7 +176,7 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
               ],
             ),
           ),
-          bottomSheet: const NowPlayingSlider(),
+          bottomSheet: NowPlayingSlider(),
         ),
       ),
     );

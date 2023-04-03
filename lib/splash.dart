@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           backgroundColor: splashcolor,
           splashTransition: SplashTransition.scaleTransition,
           splash: const Image(image: AssetImage('assets/logo.png')),
-          nextScreen: const MyHomePage(),
+          nextScreen: MyHomePage(),
         ),
       ),
     );
