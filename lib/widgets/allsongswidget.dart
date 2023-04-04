@@ -99,6 +99,8 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
                                   index: index);
 
                               updaterecentlyplayed(rsongs);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: ((context) => NowPlayingScreen())));
                             },
                             leading: QueryArtworkWidget(
                               id: alldbsongs[index].id!,
