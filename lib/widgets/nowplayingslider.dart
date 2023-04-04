@@ -81,14 +81,6 @@ class _NowPlayingSliderState extends State<NowPlayingSlider> {
                     artworkBorder: BorderRadius.circular(10),
                     id: int.parse(playing.audio.audio.metas.id!),
                     type: ArtworkType.AUDIO,
-                    // nullArtworkWidget: ClipRRect(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     child: Image.asset(
-                    //       'assets/images/music.jpeg',
-                    //       height: vheight * 0.16,
-                    //       width: vheight * 0.16,
-                    //     ),
-                    //   ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -172,14 +164,6 @@ class _NowPlayingSliderState extends State<NowPlayingSlider> {
                               child: IconButton(
                                 onPressed: () async {
                                   await audioPlayer.next();
-                                  // rsongs = RecentlyPlayed(
-                                  //     id: songs.id,
-                                  //     artist: songs.artist,
-                                  //     duration: songs.duration,
-                                  //     songname: songs.songname,
-                                  //     songurl: songs.songurl);
-
-                                  // updateRecentlyPlayed(rsongs);
                                 },
                                 icon: const Icon(
                                   Icons.skip_next,

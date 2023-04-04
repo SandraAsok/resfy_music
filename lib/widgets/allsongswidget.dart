@@ -99,9 +99,6 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
                                   index: index);
 
                               updaterecentlyplayed(rsongs);
-                              // updatePlayedSongsCount(mostsong, index);
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: ((context) => NowPlayingScreen())));
                             },
                             leading: QueryArtworkWidget(
                               id: alldbsongs[index].id!,
@@ -137,7 +134,7 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
               }),
             ),
           ),
-          NowPlayingSlider(),
+          const NowPlayingSlider(),
         ],
       ),
       // bottomSheet: const NowPlayingSlider(),

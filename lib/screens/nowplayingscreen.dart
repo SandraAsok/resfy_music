@@ -7,7 +7,6 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:resfy_music/db/functions/colors.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:resfy_music/db/models/songmodel.dart';
-import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 // ignore: must_be_immutable
 class NowPlayingScreen extends StatefulWidget {
@@ -228,8 +227,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                               height: 50,
                                               child: IconButton(
                                                 onPressed: () async {
-                                                  // previousMusic(player, value1,
-                                                  //     allDbdongs);
                                                   await player.previous();
                                                 },
                                                 icon: const Icon(
@@ -277,8 +274,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                               height: 50,
                                               child: IconButton(
                                                 onPressed: () async {
-                                                  // skipMusic(player, value1,
-                                                  //     allDbdongs);
                                                   await player.next();
                                                   setState(() {});
                                                 },
@@ -329,33 +324,5 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
         ),
       ),
     ));
-  }
-
-  void skipMusic(AssetsAudioPlayer assetsAudioPlayer, int index,
-      List<Songs> dbsongs) async {
-    player.open(
-      Audio.file(dbsongs[index + 1].songurl!),
-      showNotification: true,
-    );
-    // await _audioPlayer.next();
-    setState(() {
-      NowPlayingScreen.nowplayingindex.value++;
-      NowPlayingSlider.enteredvalue.value++;
-    });
-    await player.stop();
-  }
-
-  void previousMusic(AssetsAudioPlayer assetsAudioPlayer, int index,
-      List<Songs> dbsongs) async {
-    player.open(
-      Audio.file(dbsongs[index - 1].songurl!),
-      showNotification: true,
-    );
-    // await _audioPlayer.next();
-    setState(() {
-      NowPlayingScreen.nowplayingindex.value--;
-      NowPlayingSlider.enteredvalue.value--;
-    });
-    await player.stop();
   }
 }
