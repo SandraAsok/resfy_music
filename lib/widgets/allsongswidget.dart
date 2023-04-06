@@ -46,20 +46,21 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   player.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    double vheight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: bgcolor,
       body: Column(
         children: [
           Container(
-            height: 550,
+            height: vheight * 0.7,
             color: bgcolor,
             child: ValueListenableBuilder<Box<Songs>>(
               valueListenable: box.listenable(),
@@ -72,7 +73,6 @@ class _AllSongsWidgetState extends State<AllSongsWidget> {
                     itemBuilder: ((context, index) {
                       RecentlyPlayed rsongs;
                       Songs songs = alldbsongs[index];
-                      MostPlayed mostsong = mostplayed[index];
                       return Padding(
                         padding: const EdgeInsets.only(
                             top: 15, left: 5, bottom: 10.0),
