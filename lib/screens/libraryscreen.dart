@@ -5,7 +5,6 @@ import 'package:resfy_music/screens/likedscreen.dart';
 import 'package:resfy_music/screens/mostplayedscreen.dart';
 import 'package:resfy_music/screens/playlistscreen.dart';
 import 'package:resfy_music/screens/recentscreen.dart';
-import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});

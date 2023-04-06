@@ -152,7 +152,7 @@ class _RecentState extends State<Recent> {
                                     nullArtworkWidget: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.asset(
-                                        'assets/images/logo.png',
+                                        'assets/logo.png',
                                         height: vheight * 0.06,
                                         width: vheight * 0.06,
                                       ),
