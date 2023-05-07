@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resfy_music/bloc_logic/playlist/playlist_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
 import 'package:resfy_music/widgets/createplaylist.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:resfy_music/widgets/playlistfull_list.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class PlayListScreen extends StatefulWidget {
-  const PlayListScreen({super.key});
+class PlayListScreen extends StatelessWidget {
+  PlayListScreen({super.key});
 
-  @override
-  State<PlayListScreen> createState() => _PlayListScreenState();
-}
-
-class _PlayListScreenState extends State<PlayListScreen> {
   final playlistbox = PlaylistSongsbox.getInstance();
+
   late List<PlaylistSongs> playlistsong = playlistbox.values.toList();
 
   @override
   Widget build(BuildContext context) {
+    double vheight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: bgcolor,
@@ -81,79 +79,86 @@ class _PlayListScreenState extends State<PlayListScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-              ValueListenableBuilder<Box<PlaylistSongs>>(
-                valueListenable: playlistbox.listenable(),
-                builder: (context, Box<PlaylistSongs> playlistsongs, child) {
-                  List<PlaylistSongs> playlistsong =
-                      playlistsongs.values.toList();
-                  return playlistsong.isNotEmpty
-                      ? (ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: playlistsong.length,
-                          itemBuilder: ((context, index) {
-                            return ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => PlaylistFullList(
+              BlocBuilder<PlaylistBloc, PlaylistState>(
+                builder: (context, state) {
+                  if (state is PlaylistInitial) {
+                    context.read<PlaylistBloc>().add(FetchPlaylistSongs());
+                  }
+                  if (state is DisplayPlaylist) {
+                    return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state.Playlist.length,
+                        itemBuilder: ((context, index) {
+                          return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => PlaylistFullList(
                                             playindex: index,
-                                            playlistname: playlistsong[index]
-                                                .playlistname))));
-                              },
-                              leading: playlistsong[index]
-                                      .playlistssongs!
-                                      .isNotEmpty
-                                  ? QueryArtworkWidget(
-                                      keepOldArtwork: true,
-                                      artworkBorder: BorderRadius.circular(10),
-                                      id: playlistsong[index]
-                                          .playlistssongs![0]
-                                          .id!,
-                                      type: ArtworkType.AUDIO)
-                                  : SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
-                                        child: Image.asset(
-                                          'assets/logo.png',
-                                          fit: BoxFit.cover,
-                                        ),
+                                            playlistname: state
+                                                .Playlist[index].playlistname,
+                                          ))));
+                            },
+                            leading: state
+                                    .Playlist[index].playlistssongs!.isNotEmpty
+                                ? QueryArtworkWidget(
+                                    keepOldArtwork: true,
+                                    artworkBorder: BorderRadius.circular(10),
+                                    id: state
+                                        .Playlist[index].playlistssongs![0].id!,
+                                    type: ArtworkType.AUDIO,
+                                    nullArtworkWidget: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        'assets/logo.png',
+                                        height: vheight * 0.06,
+                                        width: vheight * 0.06,
                                       ),
                                     ),
-                              title: Text(
-                                playlistsong[index].playlistname!,
-                                style: const TextStyle(color: fontcolor),
-                              ),
-                              trailing: Wrap(
-                                children: [
-                                  IconButton(
+                                  )
+                                : SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      child: Image.asset(
+                                        'assets/logo.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                            title: Text(
+                              state.Playlist[index].playlistname!,
+                              style: TextStyle(color: fontcolor),
+                            ),
+                            trailing: Wrap(
+                              children: [
+                                IconButton(
                                     onPressed: () {
                                       showPlaylistEditOption(context, index);
                                     },
-                                    icon: const Icon(Icons.edit),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: iconcolor,
+                                    )),
+                                IconButton(
+                                  onPressed: () {
+                                    showplaylistdeleteoptions(context, index);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
                                     color: iconcolor,
                                   ),
-                                  IconButton(
-                                    onPressed: () {
-                                      showplaylistdeleteoptions(context, index);
-                                    },
-                                    icon: const Icon(Icons.delete),
-                                    color: iconcolor,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                        ))
-                      : const Center(
-                          child: Text(
-                            "You haven't created any playlist!",
-                            style: TextStyle(color: fontcolor),
-                          ),
-                        );
+                                )
+                              ],
+                            ),
+                          );
+                        }));
+                  }
+                  return Text("Your Playlists");
                 },
               )
             ],
@@ -229,51 +234,35 @@ showplaylistaddoptions(BuildContext context) {
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      TextButton(
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.close,
+                          color: iconcolor,
+                        ),
                         onPressed: () {
                           Navigator.pop(context);
-                          myController.clear();
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 100.0),
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: fontcolor,
-                            ),
-                          ),
+                        label: Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 20, color: fontcolor),
                         ),
                       ),
-                      ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: myController,
-                          builder: ((context, controller, child) {
-                            return TextButton(
-                              onPressed: myController.text.isEmpty
-                                  ? null
-                                  : !checkIfAlreadyExists(myController.text)
-                                      ? () async {
-                                          createplaylist(myController.text);
-                                          Navigator.pop(context);
-                                          myController.clear();
-                                        }
-                                      : () async {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  backgroundColor: tilecolor,
-                                                  content: Text(
-                                                    "Playlist Already exists !!!",
-                                                    style: TextStyle(
-                                                        color: fontcolor),
-                                                  )));
-                                        },
-                              child: const Text(
-                                'Done',
-                                style:
-                                    TextStyle(fontSize: 20, color: fontcolor),
-                              ),
-                            );
-                          }))
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.done,
+                          color: iconcolor,
+                        ),
+                        onPressed: () {
+                          context
+                              .read<PlaylistBloc>()
+                              .add(CreatePlaylist(myController.text));
+                          Navigator.pop(context);
+                        },
+                        label: Text(
+                          'Done',
+                          style: TextStyle(fontSize: 20, color: fontcolor),
+                        ),
+                      ),
                     ],
                   )
                 ],
@@ -347,7 +336,9 @@ showplaylistdeleteoptions(BuildContext context, int index) {
                               ),
                               child: TextButton.icon(
                                 onPressed: () {
-                                  deletePlaylist(index);
+                                  context
+                                      .read<PlaylistBloc>()
+                                      .add(DeletePlaylist(index));
                                   Navigator.pop(context);
                                 },
                                 icon: const Icon(
@@ -473,7 +464,8 @@ showPlaylistEditOption(BuildContext context, int index) {
                           color: iconcolor,
                         ),
                         onPressed: () {
-                          editPlaylist(textEditmyController.text, index);
+                          context.read<PlaylistBloc>().add(
+                              EditPlaylist(index, textEditmyController.text));
                           Navigator.pop(context);
                         },
                         label: const Text(

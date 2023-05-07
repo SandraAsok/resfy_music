@@ -65,10 +65,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ListTile(
             tileColor: tilecolor,
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => const PlayListScreen())));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => PlayListScreen())));
             },
             leading: const Icon(Icons.playlist_add, color: iconcolor, size: 25),
             title: const Text(
