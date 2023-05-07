@@ -28,8 +28,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ListTile(
             tileColor: tilecolor,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => const Liked())));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: ((context) => Liked())));
             },
             leading: const Icon(Icons.favorite, color: iconcolor, size: 25),
             title:
@@ -53,7 +53,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: ((context) => const MostPlayedScreen())));
+                      builder: ((context) => MostPlayedScreen())));
             },
             leading: const Icon(Icons.queue_music, color: iconcolor, size: 25),
             title: const Text(
