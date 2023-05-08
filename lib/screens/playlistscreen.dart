@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resfy_music/bloc_logic/playlist/playlist_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
-import 'package:resfy_music/widgets/createplaylist.dart';
 import 'package:resfy_music/widgets/playlistfull_list.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -132,7 +131,7 @@ class PlayListScreen extends StatelessWidget {
                                   ),
                             title: Text(
                               state.Playlist[index].playlistname!,
-                              style: TextStyle(color: fontcolor),
+                              style: const TextStyle(color: fontcolor),
                             ),
                             trailing: Wrap(
                               children: [
@@ -140,7 +139,7 @@ class PlayListScreen extends StatelessWidget {
                                     onPressed: () {
                                       showPlaylistEditOption(context, index);
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.edit,
                                       color: iconcolor,
                                     )),
@@ -148,7 +147,7 @@ class PlayListScreen extends StatelessWidget {
                                   onPressed: () {
                                     showplaylistdeleteoptions(context, index);
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.delete,
                                     color: iconcolor,
                                   ),
@@ -158,7 +157,7 @@ class PlayListScreen extends StatelessWidget {
                           );
                         }));
                   }
-                  return Text("Your Playlists");
+                  return const Text("Your Playlists");
                 },
               )
             ],
@@ -242,7 +241,7 @@ showplaylistaddoptions(BuildContext context) {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        label: Text(
+                        label: const Text(
                           'Cancel',
                           style: TextStyle(fontSize: 20, color: fontcolor),
                         ),

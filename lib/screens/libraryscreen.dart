@@ -18,8 +18,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final playlistbox = PlaylistSongsbox.getInstance();
-    //late List<Playlistsongs> playlistsong = playlistbox.values.toList();
     return Scaffold(
       backgroundColor: bgcolor,
       body: Column(
@@ -39,8 +37,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ListTile(
             tileColor: tilecolor,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => const Recent())));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: ((context) => Recent())));
             },
             leading: const Icon(Icons.queue_music, color: iconcolor, size: 25),
             title: const Text('Recently Played',
@@ -53,7 +51,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: ((context) => MostPlayedScreen())));
+                      builder: ((context) => const MostPlayedScreen())));
             },
             leading: const Icon(Icons.queue_music, color: iconcolor, size: 25),
             title: const Text(

@@ -137,7 +137,6 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
                     }),
                   ),
                 ),
-
                 BlocBuilder<MostplayedBloc, MostplayedState>(
                   builder: (context, state) {
                     if (state is MostplayedInitial) {
@@ -183,72 +182,20 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
                                       ),
                                       title: Text(
                                         state.mostplayed[index].songname,
-                                        style: TextStyle(color: fontcolor),
+                                        style:
+                                            const TextStyle(color: fontcolor),
                                       ),
                                     ),
                                   )),
                             )
                           : Padding(
                               padding: EdgeInsets.only(top: vertheight * 0.3),
-                              child: Text("Your most played songs ...!!"),
+                              child: const Text("Your most played songs ...!!"),
                             );
                     }
-                    return Text("   ");
+                    return const Text("   ");
                   },
                 )
-
-                // ValueListenableBuilder<Box<MostPlayed>>(
-                //   valueListenable: box.listenable(),
-                //   builder: (context, Box<MostPlayed> mostplayedDB, child) {
-                //     return mostfinalsong.isNotEmpty
-                //         ? (ListView.builder(
-                //             physics: const NeverScrollableScrollPhysics(),
-                //             shrinkWrap: true,
-                //             itemCount: mostfinalsong.length,
-                //             itemBuilder: ((context, index) => Padding(
-                //                   padding: const EdgeInsets.only(
-                //                       bottom: 8.0, left: 5),
-                //                   child: ListTile(
-                //                     onTap: () {
-                //                       player.open(
-                //                         Playlist(
-                //                             audios: songs, startIndex: index),
-                //                         headPhoneStrategy: HeadPhoneStrategy
-                //                             .pauseOnUnplugPlayOnPlug,
-                //                         showNotification: true,
-                //                       );
-                //                     },
-                //                     leading: QueryArtworkWidget(
-                //                       artworkHeight: vertheight * 0.06,
-                //                       artworkWidth: vertheight * 0.06,
-                //                       keepOldArtwork: true,
-                //                       artworkBorder: BorderRadius.circular(10),
-                //                       id: mostfinalsong[index].id,
-                //                       type: ArtworkType.AUDIO,
-                //                       nullArtworkWidget: ClipRRect(
-                //                         borderRadius: BorderRadius.circular(10),
-                //                         child: Image.asset(
-                //                           'assets/logo.png',
-                //                           height: vertheight * 0.06,
-                //                           width: vertheight * 0.06,
-                //                         ),
-                //                       ),
-                //                     ),
-                //                     title: Text(
-                //                       mostfinalsong[index].songname,
-                //                       style: const TextStyle(color: fontcolor),
-                //                     ),
-                //                   ),
-                //                 )),
-                //           ))
-                //         : const Center(
-                //             child: Text(
-                //               "Your most played songs!",
-                //               style: TextStyle(color: fontcolor),
-                //             ),
-                //           );
-                //   },
-                // ),
               ],
             ),
           ),

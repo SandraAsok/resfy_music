@@ -1,27 +1,28 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resfy_music/bloc_logic/recentlyplayed/recentlyplayed_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
-import 'package:resfy_music/db/functions/dbfunctions.dart';
 import 'package:resfy_music/db/models/recentlyplayed.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:resfy_music/screens/likedscreen.dart';
+import 'package:resfy_music/widgets/nowplayingslider.dart';
 
-class Recent extends StatefulWidget {
-  const Recent({super.key});
+class Recent extends StatelessWidget {
+  Recent({super.key});
 
-  @override
-  State<Recent> createState() => _RecentState();
-}
-
-class _RecentState extends State<Recent> {
   final _audioPlayer = AssetsAudioPlayer.withId('0');
 
   final List<RecentlyPlayed> recentplay = [];
+
   final box = RecentlyPlayedBox.getInstance();
+
   List<Audio> rcentplay = [];
+
+  // @override
   @override
-  void initState() {
+  Widget build(BuildContext context) {
+    double vheight = MediaQuery.of(context).size.height;
     final List<RecentlyPlayed> recentlyplayed =
         box.values.toList().reversed.toList();
     for (var item in recentlyplayed) {
@@ -34,14 +35,8 @@ class _RecentState extends State<Recent> {
           ),
         ),
       );
-      setState(() {});
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    double vheight = MediaQuery.of(context).size.height;
     return Container(
       color: appbarcolor,
       child: SafeArea(
@@ -126,68 +121,74 @@ class _RecentState extends State<Recent> {
                             ),
                           );
                         }))),
-                ValueListenableBuilder<Box<RecentlyPlayed>>(
-                  valueListenable: recentlyPlayedBox.listenable(),
-                  // ignore: non_constant_identifier_names
-                  builder: ((context, RecentDB, child) {
-                    // ignore: non_constant_identifier_names
-                    List<RecentlyPlayed> Recentplayed =
-                        RecentDB.values.toList();
-                    return Recentplayed.isNotEmpty
-                        ? (ListView.builder(
-                            reverse: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: Recentplayed.length,
-                            itemBuilder: ((context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 8.0, left: 5),
-                                child: ListTile(
-                                  leading: QueryArtworkWidget(
-                                    keepOldArtwork: true,
-                                    artworkBorder: BorderRadius.circular(10),
-                                    id: Recentplayed[index].id!,
-                                    type: ArtworkType.AUDIO,
-                                    nullArtworkWidget: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        'assets/logo.png',
-                                        height: vheight * 0.06,
-                                        width: vheight * 0.06,
-                                      ),
+                BlocBuilder<RecentlyplayedBloc, RecentlyplayedState>(
+                  builder: ((context, state) {
+                    if (state is RecentlyplayedInitial) {
+                      context
+                          .read<RecentlyplayedBloc>()
+                          .add(FetchRecentlyPlayed());
+                    }
+                    if (state is DisplayRecentlyPlayed) {
+                      if (state.recentPlay.isNotEmpty) {
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.recentPlay.length,
+                          itemBuilder: ((context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 8, left: 5),
+                              child: ListTile(
+                                leading: QueryArtworkWidget(
+                                  keepOldArtwork: true,
+                                  artworkBorder: BorderRadius.circular(10),
+                                  id: state.recentPlay[index].id!,
+                                  type: ArtworkType.AUDIO,
+                                  nullArtworkWidget: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset(
+                                      "assets/logo.png",
+                                      height: vheight * 0.06,
+                                      width: vheight * 0.06,
                                     ),
                                   ),
-                                  title: Text(
-                                    Recentplayed[index].songname!,
-                                    style: const TextStyle(color: fontcolor),
-                                  ),
-                                  onTap: () {
-                                    _audioPlayer.open(
-                                        Playlist(
-                                            audios: rcentplay,
-                                            startIndex: index),
-                                        showNotification: true,
-                                        headPhoneStrategy:
-                                            HeadPhoneStrategy.pauseOnUnplug,
-                                        loopMode: LoopMode.playlist);
-                                  },
                                 ),
-                              );
-                            }),
-                          ))
-                        : Padding(
-                            padding: EdgeInsets.only(top: vheight * 0.3),
-                            child: const Text(
-                              "You Have't played any songs",
-                              style: TextStyle(color: fontcolor),
-                            ),
-                          );
+                                title: Text(
+                                  state.recentPlay[index].songname!,
+                                  style: const TextStyle(color: fontcolor),
+                                ),
+                                onTap: () {
+                                  player.open(
+                                    Playlist(
+                                      audios: rcentplay,
+                                      startIndex: index,
+                                    ),
+                                    showNotification: true,
+                                    headPhoneStrategy:
+                                        HeadPhoneStrategy.pauseOnUnplug,
+                                    loopMode: LoopMode.playlist,
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                        );
+                      } else {
+                        const Center(
+                          child: Text(
+                            "Your Recently played songs",
+                            style: TextStyle(color: fontcolor),
+                          ),
+                        );
+                      }
+                    }
+                    return const Text("  ");
                   }),
-                ),
+                )
               ],
             ),
           ),
+          bottomSheet: const NowPlayingSlider(),
         ),
       ),
     );
