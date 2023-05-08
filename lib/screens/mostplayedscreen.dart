@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resfy_music/bloc_logic/mostplayed/mostplayed_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/mostplayed.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,8 +19,28 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
   final box = MostplayedBox.getInstance();
   final AssetsAudioPlayer player = AssetsAudioPlayer.withId('0');
   List<Audio> songs = [];
+  // @override
+  // void initState() {
+  //   List<MostPlayed> songlist = box.values.toList();
+
+  //   int i = 0;
+  //   for (var item in songlist) {
+  //     if (item.count > 3) {
+  //       mostfinalsong.insert(i, item);
+  //       i++;
+  //     }
+  //   }
+  //   for (var items in mostfinalsong) {
+  //     songs.add(Audio.file(items.songurl,
+  //         metas: Metas(title: items.songname, id: items.id.toString())));
+  //   }
+  //   super.initState();
+  // }
+
+  List<MostPlayed> mostfinalsong = [];
   @override
-  void initState() {
+  Widget build(BuildContext context) {
+    double vertheight = MediaQuery.of(context).size.height;
     List<MostPlayed> songlist = box.values.toList();
 
     int i = 0;
@@ -32,13 +54,7 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
       songs.add(Audio.file(items.songurl,
           metas: Metas(title: items.songname, id: items.id.toString())));
     }
-    super.initState();
-  }
 
-  List<MostPlayed> mostfinalsong = [];
-  @override
-  Widget build(BuildContext context) {
-    double vertheight = MediaQuery.of(context).size.height;
     return Container(
       color: bgcolor,
       child: SafeArea(
@@ -121,62 +137,122 @@ class _MostPlayedScreenState extends State<MostPlayedScreen> {
                     }),
                   ),
                 ),
-                ValueListenableBuilder<Box<MostPlayed>>(
-                  valueListenable: box.listenable(),
-                  builder: (context, Box<MostPlayed> mostplayedDB, child) {
-                    return mostfinalsong.isNotEmpty
-                        ? (ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: mostfinalsong.length,
-                            itemBuilder: ((context, index) => Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 8.0, left: 5),
-                                  child: ListTile(
-                                    onTap: () {
-                                      player.open(
-                                        Playlist(
-                                            audios: songs, startIndex: index),
-                                        headPhoneStrategy: HeadPhoneStrategy
-                                            .pauseOnUnplugPlayOnPlug,
-                                        showNotification: true,
-                                      );
-                                    },
-                                    leading: QueryArtworkWidget(
-                                      artworkHeight: vertheight * 0.06,
-                                      artworkWidth: vertheight * 0.06,
-                                      keepOldArtwork: true,
-                                      artworkBorder: BorderRadius.circular(10),
-                                      id: mostfinalsong[index].id,
-                                      type: ArtworkType.AUDIO,
-                                      nullArtworkWidget: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.asset(
-                                          'assets/images/logo.png',
-                                          height: vertheight * 0.06,
-                                          width: vertheight * 0.06,
+
+                BlocBuilder<MostplayedBloc, MostplayedState>(
+                  builder: (context, state) {
+                    if (state is MostplayedInitial) {
+                      context.read<MostplayedBloc>().add(FetchMostPlayed());
+                    }
+                    if (state is DisplayMostPlayed) {
+                      return state.mostplayed.isNotEmpty
+                          ? ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: songs.length,
+                              itemBuilder: ((context, index) => Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8, left: 5),
+                                    child: ListTile(
+                                      onTap: () {
+                                        player.open(
+                                          Playlist(
+                                            audios: songs,
+                                            startIndex: index,
+                                          ),
+                                          showNotification: true,
+                                          headPhoneStrategy:
+                                              HeadPhoneStrategy.pauseOnUnplug,
+                                          loopMode: LoopMode.playlist,
+                                        );
+                                      },
+                                      leading: QueryArtworkWidget(
+                                        keepOldArtwork: true,
+                                        artworkBorder:
+                                            BorderRadius.circular(10),
+                                        id: state.mostplayed[index].id,
+                                        type: ArtworkType.AUDIO,
+                                        nullArtworkWidget: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.asset(
+                                            "assets/logo.png",
+                                            height: vertheight * 0.06,
+                                            width: vertheight * 0.06,
+                                          ),
                                         ),
                                       ),
+                                      title: Text(
+                                        state.mostplayed[index].songname,
+                                        style: TextStyle(color: fontcolor),
+                                      ),
                                     ),
-                                    title: Text(
-                                      mostfinalsong[index].songname,
-                                      style: const TextStyle(color: fontcolor),
-                                    ),
-                                  ),
-                                )),
-                          ))
-                        : const Center(
-                            child: Text(
-                              "Your most played songs!",
-                              style: TextStyle(color: fontcolor),
-                            ),
-                          );
+                                  )),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(top: vertheight * 0.3),
+                              child: Text("Your most played songs ...!!"),
+                            );
+                    }
+                    return Text("   ");
                   },
-                ),
+                )
+
+                // ValueListenableBuilder<Box<MostPlayed>>(
+                //   valueListenable: box.listenable(),
+                //   builder: (context, Box<MostPlayed> mostplayedDB, child) {
+                //     return mostfinalsong.isNotEmpty
+                //         ? (ListView.builder(
+                //             physics: const NeverScrollableScrollPhysics(),
+                //             shrinkWrap: true,
+                //             itemCount: mostfinalsong.length,
+                //             itemBuilder: ((context, index) => Padding(
+                //                   padding: const EdgeInsets.only(
+                //                       bottom: 8.0, left: 5),
+                //                   child: ListTile(
+                //                     onTap: () {
+                //                       player.open(
+                //                         Playlist(
+                //                             audios: songs, startIndex: index),
+                //                         headPhoneStrategy: HeadPhoneStrategy
+                //                             .pauseOnUnplugPlayOnPlug,
+                //                         showNotification: true,
+                //                       );
+                //                     },
+                //                     leading: QueryArtworkWidget(
+                //                       artworkHeight: vertheight * 0.06,
+                //                       artworkWidth: vertheight * 0.06,
+                //                       keepOldArtwork: true,
+                //                       artworkBorder: BorderRadius.circular(10),
+                //                       id: mostfinalsong[index].id,
+                //                       type: ArtworkType.AUDIO,
+                //                       nullArtworkWidget: ClipRRect(
+                //                         borderRadius: BorderRadius.circular(10),
+                //                         child: Image.asset(
+                //                           'assets/logo.png',
+                //                           height: vertheight * 0.06,
+                //                           width: vertheight * 0.06,
+                //                         ),
+                //                       ),
+                //                     ),
+                //                     title: Text(
+                //                       mostfinalsong[index].songname,
+                //                       style: const TextStyle(color: fontcolor),
+                //                     ),
+                //                   ),
+                //                 )),
+                //           ))
+                //         : const Center(
+                //             child: Text(
+                //               "Your most played songs!",
+                //               style: TextStyle(color: fontcolor),
+                //             ),
+                //           );
+                //   },
+                // ),
               ],
             ),
           ),
-          bottomSheet: NowPlayingSlider(),
+          bottomSheet: const NowPlayingSlider(),
         ),
       ),
     );

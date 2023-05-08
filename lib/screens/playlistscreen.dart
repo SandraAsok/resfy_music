@@ -258,7 +258,7 @@ showplaylistaddoptions(BuildContext context) {
                               .add(CreatePlaylist(myController.text));
                           Navigator.pop(context);
                         },
-                        label: Text(
+                        label: const Text(
                           'Done',
                           style: TextStyle(fontSize: 20, color: fontcolor),
                         ),

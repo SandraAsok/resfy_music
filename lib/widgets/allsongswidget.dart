@@ -8,6 +8,7 @@ import 'package:resfy_music/bloc_logic/favourites/favourites_bloc.dart';
 import 'package:resfy_music/bloc_logic/mostplayed/mostplayed_bloc.dart';
 import 'package:resfy_music/bloc_logic/recentlyplayed/recentlyplayed_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
+import 'package:resfy_music/db/functions/dbfunctions.dart';
 import 'package:resfy_music/db/models/favourites.dart';
 import 'package:resfy_music/db/models/mostplayed.dart';
 import 'package:resfy_music/db/models/playlistmodel.dart';
@@ -18,9 +19,14 @@ import 'package:resfy_music/widgets/addtofavourites.dart';
 import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 // ignore: must_be_immutable
-class AllSongsWidget extends StatelessWidget {
+class AllSongsWidget extends StatefulWidget {
   AllSongsWidget({super.key});
 
+  @override
+  State<AllSongsWidget> createState() => _AllSongsWidgetState();
+}
+
+class _AllSongsWidgetState extends State<AllSongsWidget> {
   bool istaped = true;
 
   bool isalready = true;
@@ -61,7 +67,7 @@ class AllSongsWidget extends StatelessWidget {
                           itemCount: state.Allsongs.length,
                           itemBuilder: ((context, index) {
                             RecentlyPlayed rsongs;
-                            Songs songs = state.Allsongs[index];
+                            // Songs songs = state.Allsongs[index];
                             MostPlayed mostsong = mostplayedsong[index];
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -89,6 +95,7 @@ class AllSongsWidget extends StatelessWidget {
                                       .add(AddToRecentlyPlayed(rsongs));
                                   context.read<MostplayedBloc>().add(
                                       UpdateMostPlayedCount(mostsong, index));
+                                  updatePlayedSongsCount(mostsong, index);
                                 },
                                 leading: QueryArtworkWidget(
                                   artworkHeight: vheight * 0.06,
