@@ -19,14 +19,9 @@ import 'package:resfy_music/widgets/addtofavourites.dart';
 import 'package:resfy_music/widgets/nowplayingslider.dart';
 
 // ignore: must_be_immutable
-class AllSongsWidget extends StatefulWidget {
+class AllSongsWidget extends StatelessWidget {
   AllSongsWidget({super.key});
 
-  @override
-  State<AllSongsWidget> createState() => _AllSongsWidgetState();
-}
-
-class _AllSongsWidgetState extends State<AllSongsWidget> {
   bool istaped = true;
 
   bool isalready = true;
