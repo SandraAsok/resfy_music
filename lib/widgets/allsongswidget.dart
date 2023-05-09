@@ -168,7 +168,6 @@ class AllSongsWidget extends StatelessWidget {
 
 //final OnAudioQuery audioQuery = OnAudioQuery();
 
-final AssetsAudioPlayer player = AssetsAudioPlayer.withId('0');
 final mostbox = MostplayedBox.getInstance();
 
 showplaylistoptions(BuildContext context, int index) {
