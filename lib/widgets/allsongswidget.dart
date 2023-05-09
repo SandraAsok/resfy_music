@@ -26,7 +26,7 @@ class AllSongsWidget extends StatelessWidget {
 
   bool isalready = true;
 
-  final box = SongBox.getInstance();
+//  final box = SongBox.getInstance();
 
   final box4 = Favouritesbox.getinstance();
 
@@ -38,12 +38,6 @@ class AllSongsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double vheight = MediaQuery.of(context).size.height;
-    List<Songs> dbsongs = box.values.toList();
-
-    for (var item in dbsongs) {
-      convertaudio.add(Audio.file(item.songurl!,
-          metas: Metas(title: item.songname, id: item.id.toString())));
-    }
     return Scaffold(
       backgroundColor: bgcolor,
       body: Column(
@@ -54,6 +48,11 @@ class AllSongsWidget extends StatelessWidget {
                 context.read<AllsongsBloc>().add(FetchAllSongs());
               }
               if (state is DisplayAllSongs) {
+                for (var item in state.Allsongs) {
+                  convertaudio.add(Audio.file(item.songurl!,
+                      metas:
+                          Metas(title: item.songname, id: item.id.toString())));
+                }
                 return state.Allsongs.isNotEmpty
                     ? Expanded(
                         child: ListView.builder(
