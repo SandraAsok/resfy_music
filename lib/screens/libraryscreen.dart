@@ -6,14 +6,9 @@ import 'package:resfy_music/screens/mostplayedscreen.dart';
 import 'package:resfy_music/screens/playlistscreen.dart';
 import 'package:resfy_music/screens/recentscreen.dart';
 
-class LibraryScreen extends StatefulWidget {
-  const LibraryScreen({super.key});
+class LibraryScreen extends StatelessWidget {
+  LibraryScreen({super.key});
 
-  @override
-  State<LibraryScreen> createState() => _LibraryScreenState();
-}
-
-class _LibraryScreenState extends State<LibraryScreen> {
   final box = SongBox.getInstance();
 
   @override
@@ -51,7 +46,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: ((context) => const MostPlayedScreen())));
+                      builder: ((context) => MostPlayedScreen())));
             },
             leading: const Icon(Icons.queue_music, color: iconcolor, size: 25),
             title: const Text(

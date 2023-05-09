@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resfy_music/bloc_logic/favourites/favourites_bloc.dart';
 import 'package:resfy_music/db/functions/colors.dart';
 import 'package:resfy_music/db/models/favourites.dart';
-import 'package:resfy_music/widgets/addToFavourites.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:resfy_music/widgets/nowplayingslider.dart';
 

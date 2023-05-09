@@ -8,36 +8,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:resfy_music/widgets/nowplayingslider.dart';
 
-class MostPlayedScreen extends StatefulWidget {
-  const MostPlayedScreen({super.key});
+class MostPlayedScreen extends StatelessWidget {
+  MostPlayedScreen({super.key});
 
-  @override
-  State<MostPlayedScreen> createState() => _MostPlayedScreenState();
-}
-
-class _MostPlayedScreenState extends State<MostPlayedScreen> {
   final box = MostplayedBox.getInstance();
+
   final AssetsAudioPlayer player = AssetsAudioPlayer.withId('0');
+
   List<Audio> songs = [];
+
   // @override
-  // void initState() {
-  //   List<MostPlayed> songlist = box.values.toList();
-
-  //   int i = 0;
-  //   for (var item in songlist) {
-  //     if (item.count > 3) {
-  //       mostfinalsong.insert(i, item);
-  //       i++;
-  //     }
-  //   }
-  //   for (var items in mostfinalsong) {
-  //     songs.add(Audio.file(items.songurl,
-  //         metas: Metas(title: items.songname, id: items.id.toString())));
-  //   }
-  //   super.initState();
-  // }
-
   List<MostPlayed> mostfinalsong = [];
+
   @override
   Widget build(BuildContext context) {
     double vertheight = MediaQuery.of(context).size.height;

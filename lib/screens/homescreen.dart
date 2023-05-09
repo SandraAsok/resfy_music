@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           body: TabBarView(children: [
             AllSongsWidget(),
-            const LibraryScreen(),
+            LibraryScreen(),
           ]),
           // bottomSheet: const NowPlayingSlider(),
         ),
